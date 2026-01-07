@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        orbitron: ['Orbitron', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +61,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // TAMV Custom Colors
+        sovereign: {
+          gold: "hsl(var(--sovereign-gold))",
+          "gold-glow": "hsl(var(--sovereign-gold-glow))",
+        },
+        cyber: {
+          cyan: "hsl(var(--cyber-cyan))",
+          "cyan-dim": "hsl(var(--cyber-cyan-dim))",
+        },
+        abyss: {
+          DEFAULT: "hsl(var(--abyss))",
+          lighter: "hsl(var(--abyss-lighter))",
+        },
+        isabella: {
+          DEFAULT: "hsl(var(--isabella-purple))",
+          glow: "hsl(var(--isabella-glow))",
+        },
+        fenix: "hsl(var(--fenix-orange))",
+        kernel: "hsl(var(--kernel-blue))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +88,31 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "border-beam": {
+          "0%": { offsetDistance: "0%" },
+          "100%": { offsetDistance: "100%" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 2s linear infinite",
+        "border-beam": "border-beam 4s linear infinite",
+      },
+      backgroundImage: {
+        "gradient-sovereign": "linear-gradient(135deg, hsl(var(--cyber-cyan) / 0.2) 0%, hsl(var(--sovereign-gold) / 0.2) 100%)",
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
     },
   },
