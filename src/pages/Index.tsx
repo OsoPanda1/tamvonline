@@ -6,20 +6,20 @@ import { FiveColumns } from '@/components/home/FiveColumns';
 import { EightSections } from '@/components/home/EightSections';
 import { GlobalFeed } from '@/components/home/GlobalFeed';
 import { MusicPlayer } from '@/components/home/MusicPlayer';
+import { StoriesBar } from '@/components/stories/StoriesBar';
 import { Footer } from '@/components/sections/Footer';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Top Navigation */}
       <TopNavBar />
-
-      {/* Left Sidebar */}
       <LeftSidebar />
 
-      {/* Main Content */}
       <main className="pt-24 pb-32 pl-20 lg:pl-72 pr-4 transition-all duration-300">
         <div className="max-w-[1600px] mx-auto space-y-8">
+          {/* Stories Bar */}
+          <StoriesBar />
+
           {/* Hero Video */}
           <HeroVideo />
 
@@ -35,12 +35,10 @@ const Index = () => {
           {/* 8 Sections */}
           <EightSections />
 
-          {/* Footer */}
           <Footer />
         </div>
       </main>
 
-      {/* Music Player */}
       <MusicPlayer />
     </div>
   );
