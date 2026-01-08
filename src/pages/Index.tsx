@@ -1,20 +1,48 @@
-import { Hero } from '@/components/sections/Hero';
-import { SovereignStack } from '@/components/sections/SovereignStack';
-import { EconomySection } from '@/components/sections/EconomySection';
-import { FeaturesGrid } from '@/components/sections/FeaturesGrid';
-import { IsabellaSection } from '@/components/sections/IsabellaSection';
+import { TopNavBar } from '@/components/home/TopNavBar';
+import { LeftSidebar } from '@/components/home/LeftSidebar';
+import { HeroVideo } from '@/components/home/HeroVideo';
+import { InfiniteCarousel } from '@/components/home/InfiniteCarousel';
+import { FiveColumns } from '@/components/home/FiveColumns';
+import { EightSections } from '@/components/home/EightSections';
+import { GlobalFeed } from '@/components/home/GlobalFeed';
+import { MusicPlayer } from '@/components/home/MusicPlayer';
 import { Footer } from '@/components/sections/Footer';
 
 const Index = () => {
   return (
-    <main className="min-h-screen bg-background overflow-x-hidden">
-      <Hero />
-      <SovereignStack />
-      <EconomySection />
-      <FeaturesGrid />
-      <IsabellaSection />
-      <Footer />
-    </main>
+    <div className="min-h-screen bg-background">
+      {/* Top Navigation */}
+      <TopNavBar />
+
+      {/* Left Sidebar */}
+      <LeftSidebar />
+
+      {/* Main Content */}
+      <main className="pt-24 pb-32 pl-20 lg:pl-72 pr-4 transition-all duration-300">
+        <div className="max-w-[1600px] mx-auto space-y-8">
+          {/* Hero Video */}
+          <HeroVideo />
+
+          {/* Infinite Carousels */}
+          <InfiniteCarousel />
+
+          {/* 5 Columns */}
+          <FiveColumns />
+
+          {/* Global Feed */}
+          <GlobalFeed />
+
+          {/* 8 Sections */}
+          <EightSections />
+
+          {/* Footer */}
+          <Footer />
+        </div>
+      </main>
+
+      {/* Music Player */}
+      <MusicPlayer />
+    </div>
   );
 };
 
