@@ -1,0 +1,4 @@
+project_id = "pzqvyavsvxchkhlzttqz"
+
+[functions.isabella-core]
+verify_jwt = false
