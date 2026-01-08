@@ -1,6 +1,43 @@
 import { motion } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { Float, Stars } from '@react-three/drei';
+import { Suspense } from 'react';
+import { Link } from 'react-router-dom';
+import { ParticleField } from '../three/ParticleField';
+import { IsabellaOrb } from '../three/IsabellaOrb';
 import { SovereignButton } from '../ui/SovereignButton';
 import { ChevronDown, Sparkles } from 'lucide-react';
+
+const HeroScene = () => {
+  return (
+    <div className="absolute inset-0 -z-10 opacity-60">
+      <Canvas
+        camera={{ position: [0, 0, 10], fov: 55 }}
+        gl={{ antialias: true, alpha: true }}
+        style={{ background: 'transparent' }}
+      >
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.2} />
+          <directionalLight position={[10, 10, 5]} intensity={0.3} />
+          <Stars 
+            radius={80} 
+            depth={50} 
+            count={2500} 
+            factor={4} 
+            saturation={0} 
+            fade 
+            speed={0.4}
+          />
+          <ParticleField count={600} color="#00d4ff" size={0.012} />
+          <ParticleField count={150} color="#fbbf24" size={0.018} />
+          <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.25}>
+            <IsabellaOrb />
+          </Float>
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+};
 
 export const Hero = () => {
   const containerVariants = {
@@ -24,9 +61,12 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Animated background */}
-      <div className="absolute inset-0">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-16">
+      {/* 3D Scene Background */}
+      <HeroScene />
+      
+      {/* Fallback animated background */}
+      <div className="absolute inset-0 -z-20">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-isabella/10 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '1s' }} />
@@ -34,7 +74,7 @@ export const Hero = () => {
       </div>
       
       {/* Grid pattern */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
+      <div className="absolute inset-0 opacity-[0.03] -z-20" style={{
         backgroundImage: 'linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)',
         backgroundSize: '50px 50px'
       }} />
@@ -90,9 +130,11 @@ export const Hero = () => {
           <SovereignButton variant="primary" size="lg">
             Explorar Ecosistema
           </SovereignButton>
-          <SovereignButton variant="gold" size="lg">
-            Whitepaper MSR
-          </SovereignButton>
+          <Link to="/whitepaper">
+            <SovereignButton variant="gold" size="lg">
+              Whitepaper MSR
+            </SovereignButton>
+          </Link>
         </motion.div>
 
         {/* Scroll indicator */}
