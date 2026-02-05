@@ -5,13 +5,16 @@ import { InfiniteCarousel } from '@/components/home/InfiniteCarousel';
 import { FiveColumns } from '@/components/home/FiveColumns';
 import { EightSections } from '@/components/home/EightSections';
 import { GlobalFeed } from '@/components/home/GlobalFeed';
-import { MusicPlayer } from '@/components/home/MusicPlayer';
+import { MusicPlayerCollapsible } from '@/components/home/MusicPlayerCollapsible';
+import { AztecBackground } from '@/components/ui/AztecBackground';
+import { VirtualFeed } from '@/components/feed/VirtualFeed';
 import { StoriesBar } from '@/components/stories/StoriesBar';
 import { Footer } from '@/components/sections/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <AztecBackground variant="subtle" />
       <TopNavBar />
       <LeftSidebar />
 
@@ -30,7 +33,7 @@ const Index = () => {
           <FiveColumns />
 
           {/* Global Feed */}
-          <GlobalFeed />
+          <VirtualFeed />
 
           {/* 8 Sections */}
           <EightSections />
@@ -39,7 +42,7 @@ const Index = () => {
         </div>
       </main>
 
-      <MusicPlayer />
+      <MusicPlayerCollapsible />
     </div>
   );
 };

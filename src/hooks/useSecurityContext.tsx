@@ -179,14 +179,14 @@ export const SecurityProvider = ({ children }: { children: ReactNode }) => {
     if (!context.userId) return;
 
     try {
-      await supabase.from('bookpi_logs').insert({
+      await supabase.from('bookpi_logs').insert([{
         actor_id: context.userId,
         event_type: 'SECURITY',
         action,
         subject_type: resource,
-        details: details || {},
+        details: (details || {}) as Record<string, string | number | boolean | null>,
         immutable_hash: crypto.randomUUID(),
-      });
+      }]);
     } catch (error) {
       console.error('Failed to log security event:', error);
     }
