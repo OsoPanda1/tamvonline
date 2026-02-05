@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 interface AztecBackgroundProps {
-  variant?: 'calendar' | 'quetzalcoatl' | 'pattern';
+  variant?: 'calendar' | 'quetzalcoatl' | 'pattern' | 'subtle';
   opacity?: number;
   className?: string;
 }
@@ -207,9 +207,11 @@ export const AztecBackground = ({
     calendar: CalendarPattern,
     quetzalcoatl: QuetzalcoatlPattern,
     pattern: GeometricPattern,
+    subtle: GeometricPattern,
   };
 
-  const Pattern = patterns[variant];
+  const effectiveOpacity = variant === 'subtle' ? 0.015 : opacity;
+  const Pattern = patterns[variant] || patterns.pattern;
 
   return (
     <motion.div
@@ -217,7 +219,7 @@ export const AztecBackground = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 2 }}
       className={`fixed inset-0 pointer-events-none overflow-hidden text-primary ${className}`}
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 0, opacity: effectiveOpacity / opacity }}
     >
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[800px] h-[800px] animate-spin-slow">

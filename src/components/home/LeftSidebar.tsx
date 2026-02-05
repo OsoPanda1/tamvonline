@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Compass, Video, Radio, Music, Users, 
   MessageSquare, Wallet, Settings, Bot, Sparkles,
@@ -11,23 +12,24 @@ import { useState } from 'react';
 interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
+  path?: string;
   badge?: string;
   isNew?: boolean;
 }
 
 const mainNav: NavItem[] = [
-  { icon: Home, label: 'Home' },
-  { icon: Compass, label: 'Explorar' },
+  { icon: Home, label: 'Home', path: '/' },
+  { icon: Compass, label: 'Explorar', path: '/dreamspaces' },
   { icon: Video, label: 'Videos' },
   { icon: Radio, label: 'Live', badge: '12' },
   { icon: Music, label: 'Música' },
   { icon: Users, label: 'Social Nexus' },
   { icon: MessageSquare, label: 'Mensajes', badge: '5' },
-  { icon: Wallet, label: 'Wallet Nubi' },
+  { icon: Wallet, label: 'Wallet Nubi', path: '/dashboard' },
 ];
 
 const metaverseNav: NavItem[] = [
-  { icon: Sparkles, label: 'DreamSpaces', isNew: true },
+  { icon: Sparkles, label: 'DreamSpaces', isNew: true, path: '/dreamspaces' },
   { icon: Glasses, label: 'VR/XR Portal' },
   { icon: Music, label: 'Conciertos', badge: 'LIVE' },
   { icon: Palette, label: 'Galería Arte' },
@@ -45,11 +47,13 @@ const learningNav: NavItem[] = [
 const NavSection = ({ 
   title, 
   items, 
-  collapsed 
+  collapsed,
+  currentPath
 }: { 
   title: string; 
   items: NavItem[]; 
   collapsed: boolean;
+  currentPath: string;
 }) => (
   <div className="mb-6">
     {!collapsed && (
@@ -59,40 +63,81 @@ const NavSection = ({
     )}
     <div className="space-y-1 px-2">
       {items.map((item) => (
-        <motion.button
+        <motion.div
           key={item.label}
           whileHover={{ x: collapsed ? 0 : 4 }}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all group ${
-            collapsed ? 'justify-center' : ''
-          }`}
         >
-          <div className="relative">
-            <item.icon className="w-5 h-5 group-hover:text-primary transition-colors" />
-            {item.badge && collapsed && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive" />
-            )}
-          </div>
-          
-          {!collapsed && (
-            <>
-              <span className="flex-1 text-sm font-medium text-left">{item.label}</span>
-              {item.badge && (
-                <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${
-                  item.badge === 'LIVE' || item.badge === 'VIP'
-                    ? 'bg-primary/20 text-primary'
-                    : 'bg-muted text-muted-foreground'
-                }`}>
-                  {item.badge}
-                </span>
+          {item.path ? (
+            <Link
+              to={item.path}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${
+                collapsed ? 'justify-center' : ''
+              } ${
+                currentPath === item.path 
+                  ? 'bg-primary/20 text-primary' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
+              }`}
+            >
+              <div className="relative">
+                <item.icon className="w-5 h-5 group-hover:text-primary transition-colors" />
+                {item.badge && collapsed && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive" />
+                )}
+              </div>
+              {!collapsed && (
+                <>
+                  <span className="flex-1 text-sm font-medium text-left">{item.label}</span>
+                  {item.badge && (
+                    <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${
+                      item.badge === 'LIVE' || item.badge === 'VIP'
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.isNew && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-bold bg-secondary text-background rounded">
+                      NEW
+                    </span>
+                  )}
+                </>
               )}
-              {item.isNew && (
-                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-secondary text-background rounded">
-                  NEW
-                </span>
+            </Link>
+          ) : (
+            <button
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all group ${
+                collapsed ? 'justify-center' : ''
+              }`}
+            >
+              <div className="relative">
+                <item.icon className="w-5 h-5 group-hover:text-primary transition-colors" />
+                {item.badge && collapsed && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive" />
+                )}
+              </div>
+              {!collapsed && (
+                <>
+                  <span className="flex-1 text-sm font-medium text-left">{item.label}</span>
+                  {item.badge && (
+                    <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${
+                      item.badge === 'LIVE' || item.badge === 'VIP'
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.isNew && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-bold bg-secondary text-background rounded">
+                      NEW
+                    </span>
+                  )}
+                </>
               )}
-            </>
+            </button>
           )}
-        </motion.button>
+        </motion.div>
       ))}
     </div>
   </div>
@@ -100,6 +145,7 @@ const NavSection = ({
 
 export const LeftSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
 
   return (
     <motion.aside
@@ -128,9 +174,9 @@ export const LeftSidebar = () => {
 
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto py-4 scrollbar-thin">
-          <NavSection title="Principal" items={mainNav} collapsed={collapsed} />
-          <NavSection title="Metaverso" items={metaverseNav} collapsed={collapsed} />
-          <NavSection title="Aprendizaje" items={learningNav} collapsed={collapsed} />
+          <NavSection title="Principal" items={mainNav} collapsed={collapsed} currentPath={location.pathname} />
+          <NavSection title="Metaverso" items={metaverseNav} collapsed={collapsed} currentPath={location.pathname} />
+          <NavSection title="Aprendizaje" items={learningNav} collapsed={collapsed} currentPath={location.pathname} />
         </div>
 
         {/* Footer */}

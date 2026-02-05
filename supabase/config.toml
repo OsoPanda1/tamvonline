@@ -2,3 +2,6 @@ project_id = "pzqvyavsvxchkhlzttqz"
 
 [functions.isabella-core]
 verify_jwt = false
+
+[functions.bookpi-audit]
+verify_jwt = false
