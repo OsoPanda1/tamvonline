@@ -53,6 +53,50 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          author_id: string
+          badge_id: string | null
+          content: string
+          created_at: string
+          id: string
+          likes_count: number
+          post_id: string
+          priority_score: number | null
+          superlike_count: number
+        }
+        Insert: {
+          author_id: string
+          badge_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          post_id: string
+          priority_score?: number | null
+          superlike_count?: number
+        }
+        Update: {
+          author_id?: string
+          badge_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          post_id?: string
+          priority_score?: number | null
+          superlike_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       msr_ledger: {
         Row: {
           amount: number
@@ -92,6 +136,81 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          author_id: string
+          comments_count: number
+          content: string | null
+          created_at: string
+          curation_status: string | null
+          dreamspace_ref_id: string | null
+          ethical_score: number | null
+          id: string
+          is_censored: boolean | null
+          kind: string
+          likes_count: number
+          media_urls: string[] | null
+          revenue_creator: number | null
+          revenue_platform: number | null
+          risk_score: number | null
+          shares_count: number
+          subscription_price_monthly: number | null
+          superlike_count: number
+          unlock_price_msr: number | null
+          updated_at: string
+          visibility_mode: string
+          xr_scene_id: string | null
+        }
+        Insert: {
+          author_id: string
+          comments_count?: number
+          content?: string | null
+          created_at?: string
+          curation_status?: string | null
+          dreamspace_ref_id?: string | null
+          ethical_score?: number | null
+          id?: string
+          is_censored?: boolean | null
+          kind?: string
+          likes_count?: number
+          media_urls?: string[] | null
+          revenue_creator?: number | null
+          revenue_platform?: number | null
+          risk_score?: number | null
+          shares_count?: number
+          subscription_price_monthly?: number | null
+          superlike_count?: number
+          unlock_price_msr?: number | null
+          updated_at?: string
+          visibility_mode?: string
+          xr_scene_id?: string | null
+        }
+        Update: {
+          author_id?: string
+          comments_count?: number
+          content?: string | null
+          created_at?: string
+          curation_status?: string | null
+          dreamspace_ref_id?: string | null
+          ethical_score?: number | null
+          id?: string
+          is_censored?: boolean | null
+          kind?: string
+          likes_count?: number
+          media_urls?: string[] | null
+          revenue_creator?: number | null
+          revenue_platform?: number | null
+          risk_score?: number | null
+          shares_count?: number
+          subscription_price_monthly?: number | null
+          superlike_count?: number
+          unlock_price_msr?: number | null
+          updated_at?: string
+          visibility_mode?: string
+          xr_scene_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -100,6 +219,7 @@ export type Database = {
           digital_dna: Json | null
           display_name: string | null
           id: string
+          is_public: boolean
           reputation_score: number
           trust_level: Database["public"]["Enums"]["trust_level"]
           updated_at: string
@@ -112,6 +232,7 @@ export type Database = {
           digital_dna?: Json | null
           display_name?: string | null
           id?: string
+          is_public?: boolean
           reputation_score?: number
           trust_level?: Database["public"]["Enums"]["trust_level"]
           updated_at?: string
@@ -124,6 +245,7 @@ export type Database = {
           digital_dna?: Json | null
           display_name?: string | null
           id?: string
+          is_public?: boolean
           reputation_score?: number
           trust_level?: Database["public"]["Enums"]["trust_level"]
           updated_at?: string
@@ -131,14 +253,80 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string | null
+          is_public: boolean | null
+          reputation_score: number | null
+          trust_level: Database["public"]["Enums"]["trust_level"] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          is_public?: boolean | null
+          reputation_score?: number | null
+          trust_level?: Database["public"]["Enums"]["trust_level"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          is_public?: boolean | null
+          reputation_score?: number | null
+          trust_level?: Database["public"]["Enums"]["trust_level"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user" | "archon"
       msr_transaction_type:
         | "DIRECT"
         | "FENIX"
@@ -273,6 +461,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user", "archon"],
       msr_transaction_type: ["DIRECT", "FENIX", "KERNEL", "TRANSFER", "REWARD"],
       trust_level: ["observer", "citizen", "guardian", "sovereign", "archon"],
     },
