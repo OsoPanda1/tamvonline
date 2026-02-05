@@ -97,6 +97,56 @@ export type Database = {
           },
         ]
       }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       msr_ledger: {
         Row: {
           amount: number
@@ -133,6 +183,132 @@ export type Database = {
           prev_hash?: string | null
           to_user_id?: string | null
           transaction_type?: Database["public"]["Enums"]["msr_transaction_type"]
+        }
+        Relationships: []
+      }
+      notification_preferences: {
+        Row: {
+          achievement_enabled: boolean | null
+          comment_enabled: boolean | null
+          created_at: string
+          dnd_end: string | null
+          dnd_start: string | null
+          do_not_disturb: boolean | null
+          dreamspace_enabled: boolean | null
+          follow_enabled: boolean | null
+          id: string
+          isabella_enabled: boolean | null
+          like_enabled: boolean | null
+          live_enabled: boolean | null
+          mention_enabled: boolean | null
+          sound_enabled: boolean | null
+          sound_volume: number | null
+          superlike_enabled: boolean | null
+          system_enabled: boolean | null
+          transaction_enabled: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievement_enabled?: boolean | null
+          comment_enabled?: boolean | null
+          created_at?: string
+          dnd_end?: string | null
+          dnd_start?: string | null
+          do_not_disturb?: boolean | null
+          dreamspace_enabled?: boolean | null
+          follow_enabled?: boolean | null
+          id?: string
+          isabella_enabled?: boolean | null
+          like_enabled?: boolean | null
+          live_enabled?: boolean | null
+          mention_enabled?: boolean | null
+          sound_enabled?: boolean | null
+          sound_volume?: number | null
+          superlike_enabled?: boolean | null
+          system_enabled?: boolean | null
+          transaction_enabled?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievement_enabled?: boolean | null
+          comment_enabled?: boolean | null
+          created_at?: string
+          dnd_end?: string | null
+          dnd_start?: string | null
+          do_not_disturb?: boolean | null
+          dreamspace_enabled?: boolean | null
+          follow_enabled?: boolean | null
+          id?: string
+          isabella_enabled?: boolean | null
+          like_enabled?: boolean | null
+          live_enabled?: boolean | null
+          mention_enabled?: boolean | null
+          sound_enabled?: boolean | null
+          sound_volume?: number | null
+          superlike_enabled?: boolean | null
+          system_enabled?: boolean | null
+          transaction_enabled?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          body: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          is_read: boolean
+          metadata: Json | null
+          read_at: string | null
+          show_toast: boolean
+          sound_id: string | null
+          target_id: string | null
+          target_type: string | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          urgency: Database["public"]["Enums"]["notification_urgency"]
+          user_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_read?: boolean
+          metadata?: Json | null
+          read_at?: string | null
+          show_toast?: boolean
+          sound_id?: string | null
+          target_id?: string | null
+          target_type?: string | null
+          title: string
+          type: Database["public"]["Enums"]["notification_type"]
+          urgency?: Database["public"]["Enums"]["notification_urgency"]
+          user_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_read?: boolean
+          metadata?: Json | null
+          read_at?: string | null
+          show_toast?: boolean
+          sound_id?: string | null
+          target_id?: string | null
+          target_type?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["notification_type"]
+          urgency?: Database["public"]["Enums"]["notification_urgency"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -333,6 +509,19 @@ export type Database = {
         | "KERNEL"
         | "TRANSFER"
         | "REWARD"
+      notification_type:
+        | "like"
+        | "superlike"
+        | "comment"
+        | "follow"
+        | "mention"
+        | "transaction"
+        | "achievement"
+        | "dreamspace"
+        | "live"
+        | "system"
+        | "isabella"
+      notification_urgency: "low" | "normal" | "high" | "critical"
       trust_level: "observer" | "citizen" | "guardian" | "sovereign" | "archon"
     }
     CompositeTypes: {
@@ -463,6 +652,20 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user", "archon"],
       msr_transaction_type: ["DIRECT", "FENIX", "KERNEL", "TRANSFER", "REWARD"],
+      notification_type: [
+        "like",
+        "superlike",
+        "comment",
+        "follow",
+        "mention",
+        "transaction",
+        "achievement",
+        "dreamspace",
+        "live",
+        "system",
+        "isabella",
+      ],
+      notification_urgency: ["low", "normal", "high", "critical"],
       trust_level: ["observer", "citizen", "guardian", "sovereign", "archon"],
     },
   },

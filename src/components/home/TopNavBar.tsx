@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search, Mic, Sparkles, Menu, User, Settings,
   Home, Compass, Video, Radio, MessageSquare, Wallet,
@@ -9,6 +10,8 @@ import { AdvancedSearch } from '../search/AdvancedSearch';
 
 export const TopNavBar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Keyboard shortcut: CMD+K / CTRL+K
   useEffect(() => {
@@ -74,25 +77,24 @@ export const TopNavBar = () => {
             {/* Main Nav */}
             <nav className="hidden lg:flex items-center gap-1">
               {[
-                { icon: Home, label: 'Home', active: true },
-                { icon: Compass, label: 'Explorar' },
-                { icon: Video, label: 'Videos' },
-                { icon: Radio, label: 'Live' },
-                { icon: MessageSquare, label: 'Chat' },
+                { icon: Home, label: 'Home', path: '/' },
+                { icon: Compass, label: 'Explorar', path: '/dreamspaces' },
+                { icon: Video, label: 'Videos', path: '/videos' },
+                { icon: Radio, label: 'Live', path: '/live' },
+                { icon: MessageSquare, label: 'Chat', path: '/messages' },
               ].map((item) => (
-                <motion.button
+                <Link
                   key={item.label}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  to={item.path}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                    item.active 
+                    location.pathname === item.path 
                       ? 'bg-primary/20 text-primary border border-primary/30' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
                   <span className="text-sm font-medium">{item.label}</span>
-                </motion.button>
+                </Link>
               ))}
             </nav>
 
@@ -109,27 +111,36 @@ export const TopNavBar = () => {
               </motion.button>
 
               {/* Wallet */}
-              <button className="relative p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground hover:bg-primary/10 transition-colors">
+              <Link 
+                to="/dashboard" 
+                className="relative p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground hover:bg-primary/10 transition-colors"
+              >
                 <Wallet className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-secondary text-[10px] font-bold text-background flex items-center justify-center">
                   3
                 </span>
-              </button>
+              </Link>
 
               {/* Notifications */}
-              <button className="relative p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground hover:bg-primary/10 transition-colors">
+              <Link 
+                to="/notifications"
+                className="relative p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground hover:bg-primary/10 transition-colors"
+              >
                 <Bell className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-destructive text-[10px] font-bold text-white flex items-center justify-center">
                   9
                 </span>
-              </button>
+              </Link>
 
               {/* Profile */}
-              <button className="p-1 rounded-xl border-2 border-primary/40 hover:border-primary transition-colors">
+              <Link 
+                to="/profile"
+                className="p-1 rounded-xl border-2 border-primary/40 hover:border-primary transition-colors"
+              >
                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary/20 to-isabella/20 flex items-center justify-center">
                   <User className="w-5 h-5 text-primary" />
                 </div>
-              </button>
+              </Link>
 
               {/* Mobile Menu */}
               <button className="lg:hidden p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground">
