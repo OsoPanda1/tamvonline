@@ -12,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import DreamSpaces from "./pages/DreamSpaces";
 import NotFound from "./pages/NotFound";
+import Notifications from "./pages/Notifications";
+import ComingSoon from "./pages/ComingSoon";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,22 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/dreamspaces" element={<DreamSpaces />} />
+            <Route path="/notifications" element={<Notifications />} />
+            {/* Placeholder routes for coming soon features */}
+            <Route path="/videos" element={<ComingSoon />} />
+            <Route path="/live" element={<ComingSoon />} />
+            <Route path="/music" element={<ComingSoon />} />
+            <Route path="/social" element={<ComingSoon />} />
+            <Route path="/messages" element={<ComingSoon />} />
+            <Route path="/xr" element={<ComingSoon />} />
+            <Route path="/concerts" element={<ComingSoon />} />
+            <Route path="/gallery" element={<ComingSoon />} />
+            <Route path="/auctions" element={<ComingSoon />} />
+            <Route path="/isabella" element={<ComingSoon />} />
+            <Route path="/utamv" element={<ComingSoon />} />
+            <Route path="/puentes" element={<ComingSoon />} />
+            <Route path="/premium" element={<ComingSoon />} />
+            <Route path="/lottery" element={<ComingSoon />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

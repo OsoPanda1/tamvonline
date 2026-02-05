@@ -20,28 +20,28 @@ interface NavItem {
 const mainNav: NavItem[] = [
   { icon: Home, label: 'Home', path: '/' },
   { icon: Compass, label: 'Explorar', path: '/dreamspaces' },
-  { icon: Video, label: 'Videos' },
-  { icon: Radio, label: 'Live', badge: '12' },
-  { icon: Music, label: 'Música' },
-  { icon: Users, label: 'Social Nexus' },
-  { icon: MessageSquare, label: 'Mensajes', badge: '5' },
+  { icon: Video, label: 'Videos', path: '/videos' },
+  { icon: Radio, label: 'Live', badge: '12', path: '/live' },
+  { icon: Music, label: 'Música', path: '/music' },
+  { icon: Users, label: 'Social Nexus', path: '/social' },
+  { icon: MessageSquare, label: 'Mensajes', badge: '5', path: '/messages' },
   { icon: Wallet, label: 'Wallet Nubi', path: '/dashboard' },
 ];
 
 const metaverseNav: NavItem[] = [
   { icon: Sparkles, label: 'DreamSpaces', isNew: true, path: '/dreamspaces' },
-  { icon: Glasses, label: 'VR/XR Portal' },
-  { icon: Music, label: 'Conciertos', badge: 'LIVE' },
-  { icon: Palette, label: 'Galería Arte' },
-  { icon: Gavel, label: 'Subastas' },
-  { icon: Bot, label: 'Isabella AI' },
+  { icon: Glasses, label: 'VR/XR Portal', path: '/xr' },
+  { icon: Music, label: 'Conciertos', badge: 'LIVE', path: '/concerts' },
+  { icon: Palette, label: 'Galería Arte', path: '/gallery' },
+  { icon: Gavel, label: 'Subastas', path: '/auctions' },
+  { icon: Bot, label: 'Isabella AI', path: '/isabella' },
 ];
 
 const learningNav: NavItem[] = [
-  { icon: GraduationCap, label: 'UTAMV' },
-  { icon: BookOpen, label: 'Puentes' },
-  { icon: Crown, label: 'Premium', badge: 'VIP' },
-  { icon: Ticket, label: 'Lotería' },
+  { icon: GraduationCap, label: 'UTAMV', path: '/utamv' },
+  { icon: BookOpen, label: 'Puentes', path: '/puentes' },
+  { icon: Crown, label: 'Premium', badge: 'VIP', path: '/premium' },
+  { icon: Ticket, label: 'Lotería', path: '/lottery' },
 ];
 
 const NavSection = ({ 
@@ -67,13 +67,12 @@ const NavSection = ({
           key={item.label}
           whileHover={{ x: collapsed ? 0 : 4 }}
         >
-          {item.path ? (
             <Link
-              to={item.path}
+              to={item.path || '#'}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${
                 collapsed ? 'justify-center' : ''
               } ${
-                currentPath === item.path 
+                item.path && currentPath === item.path 
                   ? 'bg-primary/20 text-primary' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
               }`}
@@ -104,39 +103,6 @@ const NavSection = ({
                 </>
               )}
             </Link>
-          ) : (
-            <button
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all group ${
-                collapsed ? 'justify-center' : ''
-              }`}
-            >
-              <div className="relative">
-                <item.icon className="w-5 h-5 group-hover:text-primary transition-colors" />
-                {item.badge && collapsed && (
-                  <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive" />
-                )}
-              </div>
-              {!collapsed && (
-                <>
-                  <span className="flex-1 text-sm font-medium text-left">{item.label}</span>
-                  {item.badge && (
-                    <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${
-                      item.badge === 'LIVE' || item.badge === 'VIP'
-                        ? 'bg-primary/20 text-primary'
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.isNew && (
-                    <span className="px-1.5 py-0.5 text-[10px] font-bold bg-secondary text-background rounded">
-                      NEW
-                    </span>
-                  )}
-                </>
-              )}
-            </button>
-          )}
         </motion.div>
       ))}
     </div>
