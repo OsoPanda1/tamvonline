@@ -18,7 +18,10 @@ export type BookPIEventType =
   | 'MSR_TRANSFER'
   | 'USER_ACTION'
   | 'ISABELLA_DECISION'
-  | 'GUARDIAN_ALERT';
+  | 'GUARDIAN_ALERT'
+  | 'CONTRIBUTION'
+  | 'MEMBERSHIP'
+  | 'ECONOMY';
 
 export type BookPIPriority = 'low' | 'normal' | 'high' | 'critical';
 
@@ -276,7 +279,9 @@ export function useBookPI() {
   };
 }
 
-export default {
+// Named export for convenience
+export const bookpiClient = {
+  log: logEvent,
   logEvent,
   verifyChain,
   getAuditTrail,
@@ -287,3 +292,5 @@ export default {
   logIsabellaDecision,
   logContentAction,
 };
+
+export default bookpiClient;

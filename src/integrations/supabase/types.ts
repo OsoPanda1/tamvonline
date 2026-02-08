@@ -97,6 +97,81 @@ export type Database = {
           },
         ]
       }
+      contribution_accounts: {
+        Row: {
+          bookpi_anchor_id: string | null
+          contribution_type: Database["public"]["Enums"]["contribution_type"]
+          created_at: string
+          description: string | null
+          id: string
+          msr_anchor_hash: string | null
+          user_id: string
+          verified_by: string | null
+          weight: number
+        }
+        Insert: {
+          bookpi_anchor_id?: string | null
+          contribution_type: Database["public"]["Enums"]["contribution_type"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          msr_anchor_hash?: string | null
+          user_id: string
+          verified_by?: string | null
+          weight?: number
+        }
+        Update: {
+          bookpi_anchor_id?: string | null
+          contribution_type?: Database["public"]["Enums"]["contribution_type"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          msr_anchor_hash?: string | null
+          user_id?: string
+          verified_by?: string | null
+          weight?: number
+        }
+        Relationships: []
+      }
+      economy_pools: {
+        Row: {
+          balance_contribution_points: number | null
+          balance_msr_internal: number | null
+          balance_usage_credits: number | null
+          created_at: string
+          description: string | null
+          display_name: string
+          distribution_policy: Json | null
+          id: string
+          last_distribution_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          balance_contribution_points?: number | null
+          balance_msr_internal?: number | null
+          balance_usage_credits?: number | null
+          created_at?: string
+          description?: string | null
+          display_name: string
+          distribution_policy?: Json | null
+          id: string
+          last_distribution_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          balance_contribution_points?: number | null
+          balance_msr_internal?: number | null
+          balance_usage_credits?: number | null
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          distribution_policy?: Json | null
+          id?: string
+          last_distribution_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
@@ -115,6 +190,51 @@ export type Database = {
           follower_id?: string
           following_id?: string
           id?: string
+        }
+        Relationships: []
+      }
+      internal_ledger: {
+        Row: {
+          amount: number
+          bookpi_anchor_id: string | null
+          created_at: string
+          from_account: string
+          id: string
+          metadata: Json | null
+          msr_block_index: number | null
+          operation: Database["public"]["Enums"]["ledger_operation"]
+          policy_id: string | null
+          reason: string
+          to_account: string
+          unit: Database["public"]["Enums"]["ledger_unit"]
+        }
+        Insert: {
+          amount: number
+          bookpi_anchor_id?: string | null
+          created_at?: string
+          from_account: string
+          id?: string
+          metadata?: Json | null
+          msr_block_index?: number | null
+          operation: Database["public"]["Enums"]["ledger_operation"]
+          policy_id?: string | null
+          reason: string
+          to_account: string
+          unit: Database["public"]["Enums"]["ledger_unit"]
+        }
+        Update: {
+          amount?: number
+          bookpi_anchor_id?: string | null
+          created_at?: string
+          from_account?: string
+          id?: string
+          metadata?: Json | null
+          msr_block_index?: number | null
+          operation?: Database["public"]["Enums"]["ledger_operation"]
+          policy_id?: string | null
+          reason?: string
+          to_account?: string
+          unit?: Database["public"]["Enums"]["ledger_unit"]
         }
         Relationships: []
       }
@@ -146,6 +266,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      membership_features: {
+        Row: {
+          can_access_guardian_tools: boolean
+          can_access_institutional_apis: boolean
+          can_create_channels: boolean
+          can_moderate: boolean
+          can_stream_hd: boolean
+          max_dreamspaces: number
+          media_upload_limit_mb: number
+          monthly_usage_credits: number
+          storage_quota_mb: number
+          streaming_minutes_monthly: number
+          tier: Database["public"]["Enums"]["membership_tier"]
+          video_duration_max_seconds: number
+        }
+        Insert: {
+          can_access_guardian_tools?: boolean
+          can_access_institutional_apis?: boolean
+          can_create_channels?: boolean
+          can_moderate?: boolean
+          can_stream_hd?: boolean
+          max_dreamspaces: number
+          media_upload_limit_mb: number
+          monthly_usage_credits: number
+          storage_quota_mb: number
+          streaming_minutes_monthly: number
+          tier: Database["public"]["Enums"]["membership_tier"]
+          video_duration_max_seconds: number
+        }
+        Update: {
+          can_access_guardian_tools?: boolean
+          can_access_institutional_apis?: boolean
+          can_create_channels?: boolean
+          can_moderate?: boolean
+          can_stream_hd?: boolean
+          max_dreamspaces?: number
+          media_upload_limit_mb?: number
+          monthly_usage_credits?: number
+          storage_quota_mb?: number
+          streaming_minutes_monthly?: number
+          tier?: Database["public"]["Enums"]["membership_tier"]
+          video_duration_max_seconds?: number
+        }
+        Relationships: []
       }
       msr_ledger: {
         Row: {
@@ -429,6 +594,69 @@ export type Database = {
         }
         Relationships: []
       }
+      user_memberships: {
+        Row: {
+          auto_renew: boolean | null
+          can_access_guardian_tools: boolean | null
+          can_create_channels: boolean | null
+          can_moderate: boolean | null
+          created_at: string
+          expires_at: string | null
+          external_subscription_id: string | null
+          id: string
+          institutional_org_name: string | null
+          max_dreamspaces: number | null
+          started_at: string
+          storage_quota_mb: number | null
+          streaming_minutes_monthly: number | null
+          tier: Database["public"]["Enums"]["membership_tier"]
+          updated_at: string
+          usage_credits_granted: number | null
+          usage_credits_remaining: number | null
+          user_id: string
+        }
+        Insert: {
+          auto_renew?: boolean | null
+          can_access_guardian_tools?: boolean | null
+          can_create_channels?: boolean | null
+          can_moderate?: boolean | null
+          created_at?: string
+          expires_at?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          institutional_org_name?: string | null
+          max_dreamspaces?: number | null
+          started_at?: string
+          storage_quota_mb?: number | null
+          streaming_minutes_monthly?: number | null
+          tier?: Database["public"]["Enums"]["membership_tier"]
+          updated_at?: string
+          usage_credits_granted?: number | null
+          usage_credits_remaining?: number | null
+          user_id: string
+        }
+        Update: {
+          auto_renew?: boolean | null
+          can_access_guardian_tools?: boolean | null
+          can_create_channels?: boolean | null
+          can_moderate?: boolean | null
+          created_at?: string
+          expires_at?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          institutional_org_name?: string | null
+          max_dreamspaces?: number | null
+          started_at?: string
+          storage_quota_mb?: number | null
+          streaming_minutes_monthly?: number | null
+          tier?: Database["public"]["Enums"]["membership_tier"]
+          updated_at?: string
+          usage_credits_granted?: number | null
+          usage_credits_remaining?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -493,6 +721,17 @@ export type Database = {
       }
     }
     Functions: {
+      calculate_contribution_score: {
+        Args: { p_user_id: string }
+        Returns: number
+      }
+      check_membership_eligibility: {
+        Args: {
+          p_tier: Database["public"]["Enums"]["membership_tier"]
+          p_user_id: string
+        }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -503,6 +742,28 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "archon"
+      contribution_type:
+        | "content_creation"
+        | "moderation"
+        | "guardian_duty"
+        | "research"
+        | "infra_support"
+        | "education"
+        | "community_support"
+        | "protocol_participation"
+      ledger_operation:
+        | "mint"
+        | "burn"
+        | "transfer"
+        | "reward"
+        | "consume"
+        | "refund"
+      ledger_unit:
+        | "usage_credit"
+        | "contribution_point"
+        | "msr_internal"
+        | "governance_token"
+      membership_tier: "free" | "creator" | "guardian" | "institutional"
       msr_transaction_type:
         | "DIRECT"
         | "FENIX"
@@ -651,6 +912,31 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user", "archon"],
+      contribution_type: [
+        "content_creation",
+        "moderation",
+        "guardian_duty",
+        "research",
+        "infra_support",
+        "education",
+        "community_support",
+        "protocol_participation",
+      ],
+      ledger_operation: [
+        "mint",
+        "burn",
+        "transfer",
+        "reward",
+        "consume",
+        "refund",
+      ],
+      ledger_unit: [
+        "usage_credit",
+        "contribution_point",
+        "msr_internal",
+        "governance_token",
+      ],
+      membership_tier: ["free", "creator", "guardian", "institutional"],
       msr_transaction_type: ["DIRECT", "FENIX", "KERNEL", "TRANSFER", "REWARD"],
       notification_type: [
         "like",
