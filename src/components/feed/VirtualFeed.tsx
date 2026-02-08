@@ -1,14 +1,16 @@
- import { useState, useEffect, useRef, useCallback, memo } from 'react';
- import { motion } from 'framer-motion';
- import { useNavigate } from 'react-router-dom';
- import { 
-   TrendingUp, MessageCircle, Heart, MoreHorizontal, 
-   Image, Video, Send, Globe, Zap, Bookmark, Loader2
- } from 'lucide-react';
- import { usePosts } from '@/hooks/usePosts';
- import { useAuth } from '@/hooks/useAuth';
- import { useSoundEffects } from '@/hooks/useSoundEffects';
- import { toast } from 'sonner';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { 
+  TrendingUp, MessageCircle, Heart, MoreHorizontal, 
+  Image, Video, Send, Globe, Zap, Bookmark, Loader2,
+  X, Camera, Smile
+} from 'lucide-react';
+import { usePosts } from '@/hooks/usePosts';
+import { useAuth } from '@/hooks/useAuth';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { SecureMediaUploader } from '@/components/ui/SecureMediaUploader';
+import { toast } from 'sonner';
  
  interface DisplayPost {
    id: string;
@@ -144,11 +146,13 @@
    const navigate = useNavigate();
    const { user } = useAuth();
    const { posts: dbPosts, loading, hasMore, loadMore, likePost, createPost } = usePosts();
-   const { playClick, playSuccess } = useSoundEffects();
-   const observerRef = useRef<IntersectionObserver>();
-   const loadMoreRef = useRef<HTMLDivElement>(null);
-   const [newPostContent, setNewPostContent] = useState('');
-   const [isPosting, setIsPosting] = useState(false);
+  const { playClick, playSuccess } = useSoundEffects();
+  const observerRef = useRef<IntersectionObserver>();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [newPostContent, setNewPostContent] = useState('');
+  const [isPosting, setIsPosting] = useState(false);
+  const [showMediaUploader, setShowMediaUploader] = useState(false);
+  const [uploadedMedia, setUploadedMedia] = useState<{ url: string; type: string; name: string }[]>([]);
  
    function getTimeAgo(date: string): string {
      const now = new Date();
@@ -194,26 +198,47 @@
      await likePost(postId);
    };
  
-   const handleCreatePost = async () => {
-     if (!user) {
-       toast.error('Inicia sesión para publicar');
-       navigate('/auth');
-       return;
-     }
-     if (!newPostContent.trim()) return;
- 
-     setIsPosting(true);
-     try {
-       await createPost({ kind: 'text', content: newPostContent });
-       setNewPostContent('');
-       playSuccess();
-       toast.success('¡Publicación creada!');
-     } catch (err) {
-       toast.error('Error al publicar');
-     } finally {
-       setIsPosting(false);
-     }
-   };
+  const handleMediaUpload = (files: { url: string; type: string; name: string }[]) => {
+    setUploadedMedia(files);
+  };
+
+  const removeMedia = (index: number) => {
+    setUploadedMedia(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCreatePost = async () => {
+    if (!user) {
+      toast.error('Inicia sesión para publicar');
+      navigate('/auth');
+      return;
+    }
+    if (!newPostContent.trim() && uploadedMedia.length === 0) {
+      toast.error('Escribe algo o sube una imagen');
+      return;
+    }
+
+    setIsPosting(true);
+    try {
+      const mediaUrls = uploadedMedia.map(m => m.url);
+      const kind = uploadedMedia.some(m => m.type.startsWith('video/')) ? 'video' : 
+                   uploadedMedia.length > 0 ? 'image' : 'text';
+      
+      await createPost({ 
+        kind, 
+        content: newPostContent,
+        media_urls: mediaUrls.length > 0 ? mediaUrls : undefined,
+      });
+      setNewPostContent('');
+      setUploadedMedia([]);
+      setShowMediaUploader(false);
+      playSuccess();
+      toast.success('¡Publicación creada!');
+    } catch (err) {
+      toast.error('Error al publicar');
+    } finally {
+      setIsPosting(false);
+    }
+  };
  
    // Intersection observer for infinite scroll
    useEffect(() => {
@@ -263,42 +288,111 @@
          </div>
        </div>
  
-       {/* Compose */}
-       <div className="p-4 border-b border-primary/10 bg-muted/20">
-         <div className="flex gap-3">
-           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-isabella flex items-center justify-center text-background font-bold">
-             {user?.email?.charAt(0).toUpperCase() || 'U'}
-           </div>
-           <div className="flex-1">
-             <input
-               type="text"
-               value={newPostContent}
-               onChange={(e) => setNewPostContent(e.target.value)}
-               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleCreatePost()}
-               placeholder="¿Qué estás creando hoy?"
-               className="w-full bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-sm py-2"
-             />
-             <div className="flex items-center justify-between pt-2">
-               <div className="flex gap-2">
-                 <button className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors">
-                   <Image className="w-5 h-5" />
-                 </button>
-                 <button className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors">
-                   <Video className="w-5 h-5" />
-                 </button>
-               </div>
-               <button 
-                 onClick={handleCreatePost}
-                 disabled={isPosting || !newPostContent.trim()}
-                 className="px-4 py-1.5 rounded-lg bg-primary text-background text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-               >
-                 {isPosting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                 {isPosting ? 'Publicando...' : 'Publicar'}
-               </button>
-             </div>
-           </div>
-         </div>
-       </div>
+        {/* Compose */}
+        <div className="p-4 border-b border-primary/10 bg-muted/20">
+          <div className="flex gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-isabella flex items-center justify-center text-background font-bold flex-shrink-0">
+              {user?.email?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div className="flex-1">
+              <textarea
+                value={newPostContent}
+                onChange={(e) => setNewPostContent(e.target.value)}
+                placeholder="¿Qué estás creando hoy?"
+                rows={2}
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-sm py-2 resize-none"
+              />
+              
+              {/* Uploaded Media Preview */}
+              <AnimatePresence>
+                {uploadedMedia.length > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex gap-2 flex-wrap mb-3"
+                  >
+                    {uploadedMedia.map((media, index) => (
+                      <div key={index} className="relative group">
+                        <div className="w-20 h-20 rounded-lg overflow-hidden border border-primary/20 bg-muted">
+                          {media.type.startsWith('image/') ? (
+                            <img src={media.url} alt="" className="w-full h-full object-cover" />
+                          ) : media.type.startsWith('video/') ? (
+                            <video src={media.url} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Camera className="w-8 h-8 text-muted-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => removeMedia(index)}
+                          className="absolute -top-2 -right-2 p-1 rounded-full bg-destructive text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Media Uploader */}
+              <AnimatePresence>
+                {showMediaUploader && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mb-3"
+                  >
+                    <SecureMediaUploader
+                      bucket="posts-media"
+                      folder="posts"
+                      maxFiles={4}
+                      maxSizeMB={50}
+                      allowedTypes={['image', 'video']}
+                      onUpload={handleMediaUpload}
+                      className="bg-muted/30 rounded-xl"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex gap-1">
+                  <button 
+                    onClick={() => setShowMediaUploader(!showMediaUploader)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      showMediaUploader ? 'bg-primary/20 text-primary' : 'hover:bg-primary/10 text-primary'
+                    }`}
+                  >
+                    <Image className="w-5 h-5" />
+                  </button>
+                  <button 
+                    onClick={() => setShowMediaUploader(!showMediaUploader)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      showMediaUploader ? 'bg-primary/20 text-primary' : 'hover:bg-primary/10 text-primary'
+                    }`}
+                  >
+                    <Video className="w-5 h-5" />
+                  </button>
+                  <button className="p-2 rounded-lg hover:bg-primary/10 text-muted-foreground transition-colors">
+                    <Smile className="w-5 h-5" />
+                  </button>
+                </div>
+                <button 
+                  onClick={handleCreatePost}
+                  disabled={isPosting || (!newPostContent.trim() && uploadedMedia.length === 0)}
+                  className="px-4 py-1.5 rounded-lg bg-primary text-background text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isPosting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  {isPosting ? 'Publicando...' : 'Publicar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
  
        {/* Posts */}
        <div className="divide-y divide-primary/10">
