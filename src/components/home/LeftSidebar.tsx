@@ -19,13 +19,13 @@ interface NavItem {
 
 const mainNav: NavItem[] = [
   { icon: Home, label: 'Home', path: '/' },
-  { icon: Compass, label: 'Explorar', path: '/dreamspaces' },
+  { icon: Compass, label: 'Explorar', path: '/explore' },
   { icon: Video, label: 'Videos', path: '/videos' },
   { icon: Radio, label: 'Live', badge: '12', path: '/live' },
   { icon: Music, label: 'Música', path: '/music' },
   { icon: Users, label: 'Social Nexus', path: '/social' },
   { icon: MessageSquare, label: 'Mensajes', badge: '5', path: '/messages' },
-  { icon: Wallet, label: 'Wallet Nubi', path: '/dashboard' },
+  { icon: Wallet, label: 'Wallet MSR', path: '/wallet' },
 ];
 
 const metaverseNav: NavItem[] = [
@@ -42,6 +42,7 @@ const learningNav: NavItem[] = [
   { icon: BookOpen, label: 'Puentes', path: '/puentes' },
   { icon: Crown, label: 'Premium', badge: 'VIP', path: '/premium' },
   { icon: Ticket, label: 'Lotería', path: '/lottery' },
+  { icon: Settings, label: 'Configuración', path: '/settings' },
 ];
 
 const NavSection = ({ 

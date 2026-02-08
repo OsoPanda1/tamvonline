@@ -78,7 +78,7 @@ export const TopNavBar = () => {
             <nav className="hidden lg:flex items-center gap-1">
               {[
                 { icon: Home, label: 'Home', path: '/' },
-                { icon: Compass, label: 'Explorar', path: '/dreamspaces' },
+                { icon: Compass, label: 'Explorar', path: '/explore' },
                 { icon: Video, label: 'Videos', path: '/videos' },
                 { icon: Radio, label: 'Live', path: '/live' },
                 { icon: MessageSquare, label: 'Chat', path: '/messages' },
@@ -112,7 +112,7 @@ export const TopNavBar = () => {
 
               {/* Wallet */}
               <Link 
-                to="/dashboard" 
+                to="/wallet" 
                 className="relative p-2.5 rounded-xl bg-muted/50 border border-primary/10 text-foreground hover:bg-primary/10 transition-colors"
               >
                 <Wallet className="w-5 h-5" />
